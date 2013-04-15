@@ -1,5 +1,6 @@
 // f-wave solver
 
+#include <stdlib.h>
 #include <math.h>
 
 #define G 9.81
@@ -7,11 +8,11 @@
 typedef struct {
     double h;
     double hu;
-} Quantity;
+} State;
 
 
-double[2] roe_eigenvals(Quantity l, Quantity r) {
-    double[2] eigenvals;
+double* roe_eigenvals(State l, State r) {
+    double* eigenvals = (double*) malloc(2 * sizeof(double));
     
     double u_l = l.hu / l.h;
     double u_r = r.hu / r.h;
