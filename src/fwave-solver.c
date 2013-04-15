@@ -1,9 +1,15 @@
 // f-wave solver
 
-#include <stdlib.h>
 #include <math.h>
 
 #define G 9.81
+
+
+typedef struct {
+    double x;
+    double y;
+} Vector2D;
+
 
 typedef struct {
     double h;
@@ -11,8 +17,18 @@ typedef struct {
 } State;
 
 
-double* roe_eigenvals(State l, State r) {
-    double* eigenvals = (double*) malloc(2 * sizeof(double));
+Vector2D flux(State q) {
+    Vector2D result;
+    
+    result.x = q.hu;
+    result.y = (q.hu * q.hu) + G * (q.h * q.h) / 2;
+    
+    return result;
+}
+
+
+Vector2D roe_eigenvals(State l, State r) {
+    Vector2D eigenvals;
     
     double u_l = l.hu / l.h;
     double u_r = r.hu / r.h;
@@ -25,8 +41,8 @@ double* roe_eigenvals(State l, State r) {
     
     double c = sqrt( G * h_roe );
     
-    eigenvals[0] = u_roe - c;
-    eigenvals[1] = u_roe + c;
+    eigenvals.x = u_roe - c;
+    eigenvals.y = u_roe + c;
     
     return eigenvals;
 }
