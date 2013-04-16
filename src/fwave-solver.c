@@ -47,14 +47,7 @@ Vector2D roe_eigenvals(State ql, State qr) {
     return eigenvals;
 }
 
-Vector2D eigencoeffis(State ql, State qr, Vector2D roe_eigenvals) {
-    Vector2D f1 = flux(ql);
-    Vector2D f2 = flux(qr);
-    
-    Vector2D df;
-    df.x = f1.x - f2.x;
-    df.y = f1.y - f2.y;
-    
+Vector2D eigencoeffis(Vector2D roe_eigenvals, Vector2D df) {
     // matrix-vector multiplication:
     // /  lambda_2 -1 \-1
     // \ -lambda_1  1 /    * df
