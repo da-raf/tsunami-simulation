@@ -1,5 +1,6 @@
 // f-wave solver
 
+#include <stdlib.h>
 #include <math.h>
 
 #define G 9.81
@@ -58,6 +59,68 @@ Vector2D eigencoeffis(Vector2D roe_eigenvals, Vector2D df) {
     Vector2D result;
     result.x = (roe_eigenvals.y * df.x - df.y) * c;
     result.y = (df.y - roe_eigenvals.x * df.x) * c;
+    
+    return result;
+}
+
+
+Vector2D* calculate_updates(State ql, State qr) {
+    Vector2D lambda_roe = roe_eigenvals(ql, qr);
+    
+    if(lambda_roe.x < 0.0 && lambda_roe.y < 0.0)
+        lambda_roe.y = 0;
+    else if(lambda_roe > 0.0 && lambda_roe > 0.0)
+        lambda_roe.x = 0;
+    
+    Vector2D fl = flux(ql);
+    Vector2D fr = flux(qr);
+    
+    Vector2D df;
+    df.x = fr.x - fl.x;
+    df.y = fr.y - fl.y;
+    
+    Vector2D alpha = eigencoeffis(lambda_roe, df);
+    
+    Vector2D[2] z;
+    
+    z[0].x = alpha.x;
+    z[0].y = alpha.x * lambda_roe.x;
+    
+    z[1].x = alpha.y;
+    z[1].y = alpha.y * lambda_roe.y;
+    
+    
+    Vector2D* result = (Vector2D*) malloc(2 * sizeof(Vector2D));
+    // A- dQ
+    if(alpha.x < 0) {
+        result[0].x = z[0].x;
+        result[0].y = z[0].y;
+    }
+    else {
+        result[0].x = 0;
+        result[0].y = 0;
+    }
+    
+    if(alpha.y < 0) {
+        result[0].x += z[1].x;
+        result[0].y += z[1].y;
+    }
+    
+    
+    // A+ dQ
+    if(alpha.x > 0) {
+        result[1].x = z[0].x;
+        result[1].y = z[0].y;
+    }
+    else {
+        result[1].x = 0;
+        result[1].y = 0;
+    }
+    
+    if(alpha.y > 0) {
+        result[1].x += z[1].x;
+        result[1].y += z[1].y;
+    }
     
     return result;
 }
