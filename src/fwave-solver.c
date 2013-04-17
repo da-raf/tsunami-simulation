@@ -80,33 +80,30 @@ Vector2D* calculate_updates(State ql, State qr) {
     
     
     Vector2D* result = (Vector2D*) malloc(2 * sizeof(Vector2D));
+    result[0].x = 0;
+    result[0].y = 0;
+    result[1].x = 0;
+    result[1].y = 0;
+    
     // A- dQ
-    if(alpha.x < 0) {
+    if(lambda_roe.x < 0) {
         result[0].x = z[0].x;
         result[0].y = z[0].y;
     }
-    else {
-        result[0].x = 0;
-        result[0].y = 0;
-    }
     
-    if(alpha.y < 0) {
+    if(lambda_roe.y < 0) {
         result[0].x += z[1].x;
         result[0].y += z[1].y;
     }
     
     
     // A+ dQ
-    if(alpha.x > 0) {
+    if(lambda_roe.x > 0) {
         result[1].x = z[0].x;
         result[1].y = z[0].y;
     }
-    else {
-        result[1].x = 0;
-        result[1].y = 0;
-    }
     
-    if(alpha.y > 0) {
+    if(lambda_roe.y > 0) {
         result[1].x += z[1].x;
         result[1].y += z[1].y;
     }
