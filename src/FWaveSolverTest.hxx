@@ -36,6 +36,40 @@ public:
         TS_ASSERT_DELTA(lambda2, test_lambda.y, 1.0E-9);
     }
     
-    // void testSteadyState();
+    void testFlux() {
+        State q;
+        q.h = 4.3;
+        q.hu = 2.5;
+        
+        Vector2D flux_test = flux(q);
+        
+        TS_ASSERT_DELTA(flux_test.x, 2.5, 1.0E-9);
+        TS_ASSERT_DELTA(flux_test.y, 96.94345, 1.0E-9);
+    }
+    
+    void testEigencoefficients() {
+        Vector2D eigenvals, df;
+        eigenvals.x = -0.9;
+        eigenvals.y = 1.4;
+        df.x = 1.5;
+        df.y = 4.5;
+        
+        Vector2D ec = eigencoeffis(eigenvals, df);
+        
+        TS_ASSERT_DELTA(ec.x, -1.04347826087, 1.0E-9);
+        TS_ASSERT_DELTA(ec.y, 2.54347826087, 1.0E-9);
+    }
+    
+    void testSteadyState() {
+        State ql, qr;
+        
+        ql.h = qr.h = 2.4;
+        ql.hu = qr.hu = 3.7;
+        
+        Vector2D* z = calculate_updates(ql, qr);
+        TS_ASSERT_DELTA(z[0].x, ql.h, 1.0E-9);
+        TS_ASSERT_DELTA(z[0].y, ql.hu, 1.0E-9);
+    }
+    
     // void testSupersonic();
 };
