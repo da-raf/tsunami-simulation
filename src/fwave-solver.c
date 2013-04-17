@@ -1,21 +1,10 @@
 // f-wave solver
 
+#include "fwave-solver.h"
+
 #include <stdlib.h>
+#include <assert.h>
 #include <math.h>
-
-#define G 9.81
-
-
-typedef struct {
-    double x;
-    double y;
-} Vector2D;
-
-
-typedef struct {
-    double h;
-    double hu;
-} State;
 
 
 Vector2D flux(State q) {
@@ -69,7 +58,7 @@ Vector2D* calculate_updates(State ql, State qr) {
     
     if(lambda_roe.x < 0.0 && lambda_roe.y < 0.0)
         lambda_roe.y = 0;
-    else if(lambda_roe > 0.0 && lambda_roe > 0.0)
+    else if(lambda_roe.x > 0.0 && lambda_roe.y > 0.0)
         lambda_roe.x = 0;
     
     Vector2D fl = flux(ql);
@@ -81,7 +70,7 @@ Vector2D* calculate_updates(State ql, State qr) {
     
     Vector2D alpha = eigencoeffis(lambda_roe, df);
     
-    Vector2D[2] z;
+    Vector2D z[2];
     
     z[0].x = alpha.x;
     z[0].y = alpha.x * lambda_roe.x;
