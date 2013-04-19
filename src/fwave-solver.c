@@ -20,6 +20,9 @@ Vector2D flux(State q) {
 Vector2D roe_eigenvals(State ql, State qr) {
     Vector2D eigenvals;
     
+    assert(ql.h > 0.0);
+    assert(qr.h > 0.0);
+
     double u_l = ql.hu / ql.h;
     double u_r = qr.hu / qr.h;
     
@@ -42,7 +45,8 @@ Vector2D eigencoeffis(Vector2D roe_eigenvals, Vector2D df) {
     // /  lambda_2 -1 \-1
     // \ -lambda_1  1 /    * df
     
-    assert(roe_eigenvals.y - roe_eigenvals.x != 0);
+    assert(roe_eigenvals.y != roe_eigenvals.x);
+    
     double c = 1 / (roe_eigenvals.y - roe_eigenvals.x);
     
     Vector2D result;
