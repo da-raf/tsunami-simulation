@@ -67,8 +67,11 @@ public:
         ql.hu = qr.hu = 3.7;
         
         Vector2D* z = calculate_updates(ql, qr);
-        TS_ASSERT_DELTA(z[0].x, ql.h, 1.0E-9);
-        TS_ASSERT_DELTA(z[0].y, ql.hu, 1.0E-9);
+        TS_ASSERT_DELTA(z[0].x, 0.0, 1.0E-9);
+        TS_ASSERT_DELTA(z[0].y, 0.0, 1.0E-9);
+        TS_ASSERT_DELTA(z[1].y, 0.0, 1.0E-9);
+        TS_ASSERT_DELTA(z[1].y, 0.0, 1.0E-9);
+        
     }
     
     // void testSupersonic();
