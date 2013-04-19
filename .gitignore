@@ -1,2 +1,6 @@
+# binaries and save-copies
 *.o
+*~
 
+# files created automatically by cxxtest
+runner*
