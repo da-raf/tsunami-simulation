@@ -87,8 +87,8 @@ Vector2D* calculate_updates(State ql, State qr) {
     
     // A- dQ
     if(lambda_roe.x < 0) {
-        result[0].x = z[0].x;
-        result[0].y = z[0].y;
+        result[0].x += z[0].x;
+        result[0].y += z[0].y;
     }
     
     if(lambda_roe.y < 0) {
@@ -99,8 +99,8 @@ Vector2D* calculate_updates(State ql, State qr) {
     
     // A+ dQ
     if(lambda_roe.x > 0) {
-        result[1].x = z[0].x;
-        result[1].y = z[0].y;
+        result[1].x += z[0].x;
+        result[1].y += z[0].y;
     }
     
     if(lambda_roe.y > 0) {
