@@ -48,13 +48,19 @@ public:
     }
     
     void testEigencoefficients() {
-        Vector2D eigenvals, df;
+        State ql, qr;
+	ql.hu = 1.5;
+	qr.hu = 3.0;
+	ql.h  = 1.0;
+	qr.h  = 0.73572032979;
+
+	Vector2D eigenvals;
         eigenvals.x = -0.9;
         eigenvals.y = 1.4;
-        df.x = 1.5;
-        df.y = 4.5;
+        // df.x = 1.5;
+        // df.y = 4.5;
         
-        Vector2D ec = eigencoeffis(eigenvals, df);
+        Vector2D ec = eigencoeffis(ql, qr, eigenvals);
         
         TS_ASSERT_DELTA(ec.x, -1.04347826087, 1.0E-9);
         TS_ASSERT_DELTA(ec.y, 2.54347826087, 1.0E-9);

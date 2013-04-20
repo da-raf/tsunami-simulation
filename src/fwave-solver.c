@@ -40,7 +40,15 @@ Vector2D roe_eigenvals(State ql, State qr) {
     return eigenvals;
 }
 
-Vector2D eigencoeffis(Vector2D roe_eigenvals, Vector2D df) {
+Vector2D eigencoeffis(State ql, State qr, Vector2D roe_eigenvals) {
+    
+    Vector2D fl = flux(ql);
+    Vector2D fr = flux(qr);
+    
+    Vector2D df;
+    df.x = fr.x - fl.x;
+    df.y = fr.y - fl.y;
+    
     // matrix-vector multiplication:
     // /  lambda_2 -1 \-1
     // \ -lambda_1  1 /    * df
@@ -65,14 +73,7 @@ Vector2D* calculate_updates(State ql, State qr) {
     else if(lambda_roe.x > 0.0 && lambda_roe.y > 0.0)
         lambda_roe.x = 0;
     
-    Vector2D fl = flux(ql);
-    Vector2D fr = flux(qr);
-    
-    Vector2D df;
-    df.x = fr.x - fl.x;
-    df.y = fr.y - fl.y;
-    
-    Vector2D alpha = eigencoeffis(lambda_roe, df);
+    Vector2D alpha = eigencoeffis(ql, qr, lambda_roe);
     
     Vector2D z[2];
     
