@@ -4,3 +4,8 @@
 
 # files created automatically by cxxtest
 runner*
+
+# automatically generated documentation
+html/
+latex/
+
