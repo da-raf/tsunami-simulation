@@ -111,6 +111,10 @@ void FWave<T>::computeNetUpdates(
         }
     }
     
+    // calculate the maximum speed
+    if(roe[0] < 0.0) roe[0] *= -1;
+    if(roe[1] < 0.0) roe[1] *= -1;
+    
     if(roe[0] > roe[1])
         maxEdgeSpeed = roe[0];
     else
