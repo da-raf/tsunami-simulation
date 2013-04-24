@@ -1,9 +1,9 @@
 #include <cxxtest/TestSuite.h>
-#include "FWave.h"
+#include "FWave.hpp"
 
 #define PRIVATE_PUBLIC
 
-using namespace std;
+using namespace solver;
 
 class FWaveSolverTest : public CxxTest::TestSuite
 {

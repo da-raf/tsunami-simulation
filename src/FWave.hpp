@@ -5,7 +5,7 @@
 
 #define G 9.81
 
-using namespace std;
+namespace solver {
 
 template<class T>
 class FWave
@@ -40,6 +40,8 @@ private:
 };
 
 #include "FWave.cpp"
+// end of namespace solver
+}
 
 #endif
 

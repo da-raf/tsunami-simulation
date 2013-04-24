@@ -1,4 +1,7 @@
-#include "FWave.h"
+#include "FWave.hpp"
+
+#include <math.h>
+#include <assert.h>
 
 template<class T>
 void FWave<T>::flux(T h, T hu, T& f1, T& f2)
