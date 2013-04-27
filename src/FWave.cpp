@@ -54,12 +54,12 @@ void FWave<T>::eigencoeffis(
     df2 = f2r - f2l;
     
     // matrix-vector multiplication:
-    // /  lambda_2 -1 \-1
-    // \ -lambda_1  1 /    * df
+    // /        1 |        1 \-1
+    // \ lambda_1 | lambda_2 /    * df
     
     assert(roe2 != roe1);
     
-    T c = 1 / (roe1 - roe2);
+    T c = 1 / (roe2 - roe1);
     
     alpha1 = (roe2 * df1 - df2) * c;
     alpha2 = (df2 - roe1 * df1) * c;
