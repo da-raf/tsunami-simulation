@@ -9,6 +9,9 @@
 
 using namespace solver;
 
+/**
+ * This is the cxxtest test-suite for the FWave template class.
+ */
 class FWaveSolverTest : public CxxTest::TestSuite
 {
 public:
@@ -124,7 +127,13 @@ public:
         
     }
     
-    void testSupersonic(){
+    /**
+     * testSupersonic will check the function computeNetUpdates for correct behavior
+     * in the supersonic case (both eigenvalues greater/less than zero)
+     * - greater than zero: the net-updates on the left have to be zero
+     * - less than zero: the net-updates on the right have to be zero
+     */
+    void testSupersonic() {
         FWave<TYPE> solver;
         
         TYPE updateLeft[2], updateRight[2];
