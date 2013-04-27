@@ -127,24 +127,32 @@ public:
     void testSupersonic(){
         FWave<TYPE> solver;
         
-        
-        
         TYPE updateLeft[2], updateRight[2];
-        TYPE maxSpeed[5] ={0,0,3.132,0,0};
+        TYPE maxSpeed;
         
-        TYPE hl[5] =  {1,1,1,1,1};
-        TYPE hr[5] =  {1,1,1,1,1};
-        TYPE hul[5] = {2,-2,0,-1,1};
-        TYPE hur[5] = {1,-1,0,-2,2};
-        int i;
-        for(i = 0; i<5;i++){
-            solver.computeNetUpdates(
-                    hl[i], hr[i], hul[i], hur[i], 0.f, 0.f,
-                    updateLeft[0], updateRight[0],
-                    updateLeft[1], updateRight[1],
-                    maxSpeed[i] );
-                    
-            TS_ASSERT_DELTA(maxSpeed[i], 0.0, MAXERROR);
-        }
+        // supersonic wave from left to right
+        TYPE hl = 1.0;
+        TYPE hr = 1.0;
+        TYPE hul = 4.0;
+        TYPE hur = 6.0;
+        
+        solver.computeNetUpdates(hl, hr, hul, hur, 0.f, 0.f,
+                                 updateLeft[0], updateRight[0],
+                                 updateLeft[1], updateRight[1],
+                                 maxSpeed );
+        TS_ASSERT_DELTA(updateLeft[0], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateLeft[1], 0.0, MAXERROR);
+        
+        // supersonic wave from right to left
+        hul = -4.0;
+        hur = -6.0;
+        
+        solver.computeNetUpdates(hl, hr, hul, hur, 0.f, 0.f,
+                                 updateLeft[0], updateRight[0],
+                                 updateLeft[1], updateRight[1],
+                                 maxSpeed );
+        TS_ASSERT_DELTA(updateRight[0], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateRight[1], 0.0, MAXERROR);
+        
     }
 };
