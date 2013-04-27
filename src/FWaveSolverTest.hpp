@@ -12,6 +12,10 @@ using namespace solver;
 class FWaveSolverTest : public CxxTest::TestSuite
 {
 public:
+    /**
+     * this function will test the private function roeEigenvals
+     * of the template FWave by performing two value checks
+     */
     void testEigenvalues() {
         FWave<TYPE> solver;
         
@@ -49,6 +53,10 @@ public:
         TS_ASSERT_DELTA(lambda[1], test_lambda[1], MAXERROR);
     }
     
+    /**
+     * testFlux will perform a fast value check on the private function "flux"
+     * of the template "FWave"
+     */
     void testFlux() {
         FWave<TYPE> solver;
         
@@ -62,6 +70,10 @@ public:
         TS_ASSERT_DELTA(fl[1], 96.94345, MAXERROR);
     }
     
+    /**
+     * testEigencoefficients will do a valueCheck on the function "eigencoeffis" of the
+     * template "FWave"
+     */
     void testEigencoefficients() {
         FWave<TYPE> solver;
         
@@ -84,6 +96,10 @@ public:
         TS_ASSERT_DELTA(ec[1],  2.54347826087, MAXERROR);
     }
     
+    /**
+     * testSteadyState will calculate the net updates for identical water columns and
+     * momentum on both sides, which have to be equal to zero
+     */
     void testSteadyState() {
         FWave<TYPE> solver;
         
