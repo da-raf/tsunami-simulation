@@ -124,9 +124,9 @@ void FWave<T>::computeNetUpdates(
     if(roe[1] < 0.0) roe[1] *= -1;
     
     if(roe[0] > roe[1])
-        maxEdgeSpeed = roe[0]*2;
+        maxEdgeSpeed = roe[0]*roe[0];
     else
-        maxEdgeSpeed = roe[1]*2;
+        maxEdgeSpeed = roe[1]*roe[1];
     
     return;
 }
