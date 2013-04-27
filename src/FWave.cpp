@@ -77,10 +77,10 @@ void FWave<T>::computeNetUpdates(
 		T& maxEdgeSpeed )
 {
 	T roe[2];
-	roeEigenvals(hLeft, hRight, huLeft, huRight, roe[0], roe[1]);
+	roeEigenvals(hLeft, hRight, huLeft, huRight, roe[0], roe[1]); // formel 3,4
     
     T alpha[2];
-    eigencoeffis(hLeft, hRight, huLeft, huRight, roe[0], roe[1], alpha[0], alpha[1]);
+    eigencoeffis(hLeft, hRight, huLeft, huRight, roe[0], roe[1], alpha[0], alpha[1]); // Formel 8
     
     T h[2];
     T hu[2];
@@ -115,13 +115,18 @@ void FWave<T>::computeNetUpdates(
     }
     
     // calculate the maximum speed
+    if(roe[0] < 0.0 && roe[1] < 0.0)
+        roe[1] = 0.0;
+    else if(roe[0] > 0.0 && roe[1] > 0.0)
+        roe[0] = 0.0;
+    
     if(roe[0] < 0.0) roe[0] *= -1;
     if(roe[1] < 0.0) roe[1] *= -1;
     
     if(roe[0] > roe[1])
-        maxEdgeSpeed = roe[0];
+        maxEdgeSpeed = roe[0]*2;
     else
-        maxEdgeSpeed = roe[1];
+        maxEdgeSpeed = roe[1]*2;
     
     return;
 }
