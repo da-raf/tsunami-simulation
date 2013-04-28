@@ -38,25 +38,22 @@ public:
      * @param huNetUpdatesLeft reference to the variable that will store the update to the momentum of the water on the left
      * @param huNetUpdatesRight reference to the variable that will store the update to the momentum of the water on the right
      * @param maxEdgeSpeed reference to the variable that will store the maximum edge-speed
-     * 
      */
-    void computeNetUpdates(
-		T hLeft,             T hRight,
-		T huLeft,            T huRight,
-		T bathLeft,          T bathRight,
-		T& hNetUpdatesLeft,  T& hNetUpdatesRight,
-		T& huNetUpdatesLeft, T& huNetUpdatesRight,
-		T& maxEdgeSpeed );
+    void computeNetUpdates(const T &hLeft, const T &hRight, const T &huLeft, const T &huRight,
+                           const T &bathLeft, const T &bathRight,
+                           T& hNetUpdatesLeft,  T& hNetUpdatesRight,
+                           T& huNetUpdatesLeft, T& huNetUpdatesRight,
+                           T& maxEdgeSpeed );
+    
 private:
     /**
      * calculate the result of the flux function for this quantity
      * 
      * @param h height of the water column
      * @param hu momentum of the water current
-     * @param f1 reference to the variable the result of the first component of the flux function will be written to
-     * @param f2 reference to the variable the result of the second component of the flux function will be written to
+     * @param fl pointer to an array with at least two elements, where the resulting vector will be written into
      */
-    void flux(T h, T hu, T& f1, T& f2);
+    void flux(const T &h, const T &hu, T *fl);
     
     /** 
      * calculate the Roe eigenvalues for the left and right quantities
@@ -65,11 +62,9 @@ private:
      * @param hr water column height on the right side
      * @param hul momentum of the water on the left side
      * @param hur momentum of the water on the right side
-     * @param roe1 reference to the variable the first roe-eigenvalue will be written into
-     * @param roe2 reference to the variable the second roe-eigenvalue will be written into
-     * 
+     * @param lambda_roe an array with at least two elements, where the eigenvalues will be written into
      */
-    void roeEigenvals(T hl, T hr, T hul, T hur, T& roe1, T& roe2);
+    void roeEigenvals(const T &hl, const T &hr, const T &hul, const T &hur, T *lambda_roe);
     
     /**
      * calculate the eigencoefficients for given states left and right and roe-eigenvalues
@@ -78,16 +73,11 @@ private:
      * @param hr water column height on the right side
      * @param hul momentum of the water on the left side
      * @param hur momentum of the water on the right side
-     * @param roe1 first roe-eigenvalue
-     * @param roe2 second roe-eigenvalue
-     * @param alpha1 reference to the variable that the first eigencoefficient will be written into
-     * @param alpha2 reference to the variable that the second eigencoefficient will be written into
-     * 
+     * @param lambda_roe an array containing the two roe eigenvalues
+     * @param alpha an array with at least two elements, where the eigencoefficients will be written into
      */
-    void eigencoeffis(
-        T hl, T hr, T hul, T hur,
-        T roe1, T roe2,
-        T& alpha1, T& alpha2 );
+    void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur,
+                      const T *lambda_roe, T *alpha );
 };
 
 #include "FWave.cpp"

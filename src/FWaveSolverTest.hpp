@@ -36,7 +36,7 @@ public:
         lambda[0] = -3.95227220577;
         lambda[1] =  5.95227220577;
         
-        solver.roeEigenvals(hl, hr, hul, hur, test_lambda[0], test_lambda[1]);
+        solver.roeEigenvals(hl, hr, hul, hur, test_lambda);
         
         TS_ASSERT_DELTA(lambda[0], test_lambda[0], MAXERROR);
         TS_ASSERT_DELTA(lambda[1], test_lambda[1], MAXERROR);
@@ -50,7 +50,7 @@ public:
         lambda[0] = -3.50692249113;
         lambda[1] =  5.57074240685;
         
-        solver.roeEigenvals(hl, hr, hul, hur, test_lambda[0], test_lambda[1]);
+        solver.roeEigenvals(hl, hr, hul, hur, test_lambda);
         
         TS_ASSERT_DELTA(lambda[0], test_lambda[0], MAXERROR);
         TS_ASSERT_DELTA(lambda[1], test_lambda[1], MAXERROR);
@@ -67,10 +67,10 @@ public:
         TYPE hu = 2.5;
         
         TYPE fl[2];
-        solver.flux(h, hu, fl[0], fl[1]);
+        solver.flux(h, hu, fl);
         
-        TS_ASSERT_DELTA(fl[0],      2.5, MAXERROR);
-        TS_ASSERT_DELTA(fl[1], 96.94345, MAXERROR);
+        TS_ASSERT_DELTA(fl[0],           2.5, MAXERROR);
+        TS_ASSERT_DELTA(fl[1], 92.1469383721, MAXERROR);
     }
     
     /**
@@ -81,22 +81,22 @@ public:
         FWave<TYPE> solver;
         
         TYPE hul = 1.5;
-	    TYPE hur = 3.0;
-	    TYPE hl  = 1.0;
-	    TYPE hr  = 0.73572032979;
+        TYPE hur = 3.0;
+        TYPE hl  = 1.0;
+        TYPE hr  = 0.73572032979;
         
-	    TYPE eigenvals[2];
+        TYPE eigenvals[2];
         TYPE ec[2];
         
         eigenvals[0] = -0.9;
         eigenvals[1] =  1.4;
         // df.x = 1.5;
-        // df.y = 4.5;
+        // df.y = 7.73290921233;
         
-        solver.eigencoeffis(hl, hr, hul, hur, eigenvals[0], eigenvals[1], ec[0], ec[1]);
+        solver.eigencoeffis(hl, hr, hul, hur, eigenvals, ec);
         
-        TS_ASSERT_DELTA(ec[0], -1.04347826087, MAXERROR);
-        TS_ASSERT_DELTA(ec[1],  2.54347826087, MAXERROR);
+        TS_ASSERT_DELTA(ec[0], -2.44909096188, MAXERROR);
+        TS_ASSERT_DELTA(ec[1],  3.94909096188, MAXERROR);
     }
     
     /**
