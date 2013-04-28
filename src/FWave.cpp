@@ -6,8 +6,9 @@
 template<class T>
 void FWave<T>::flux(T h, T hu, T& f1, T& f2)
 {
-    f1 = hu;
-    f2 = (hu * hu) + G * (h * h) / 2;
+    T u = hu / h;
+    f1  = hu;
+    f2  = h * (u * u) + G * (h * h) / 2;
     
     return;
 }
@@ -57,7 +58,7 @@ void FWave<T>::eigencoeffis(
     // /        1 |        1 \-1
     // \ lambda_1 | lambda_2 /    * df
     
-    assert(roe2 != roe1);
+    assert(fabs(roe2 - roe1) > 0.01);
     
     T c = 1 / (roe2 - roe1);
     
@@ -76,8 +77,8 @@ void FWave<T>::computeNetUpdates(
 		T& huNetUpdateLeft, T& huNetUpdateRight,
 		T& maxEdgeSpeed )
 {
-	T roe[2];
-	roeEigenvals(hLeft, hRight, huLeft, huRight, roe[0], roe[1]); // formel 3,4
+    T roe[2];
+    roeEigenvals(hLeft, hRight, huLeft, huRight, roe[0], roe[1]); // formel 3,4
     
     T alpha[2];
     eigencoeffis(hLeft, hRight, huLeft, huRight, roe[0], roe[1], alpha[0], alpha[1]); // Formel 8
@@ -115,18 +116,21 @@ void FWave<T>::computeNetUpdates(
     }
     
     // calculate the maximum speed
+    T lambda_l = roe[0];
+    T lambda_r = roe[1];
+    
     if(roe[0] < 0.0 && roe[1] < 0.0)
-        roe[1] = 0.0;
+        lambda_r = 0.0;
     else if(roe[0] > 0.0 && roe[1] > 0.0)
-        roe[0] = 0.0;
+        lambda_l = 0.0;
     
-    if(roe[0] < 0.0) roe[0] *= -1;
-    if(roe[1] < 0.0) roe[1] *= -1;
-    
-    if(roe[0] > roe[1])
-        maxEdgeSpeed = roe[0]*roe[0];
+    lambda_l = fabs(lambda_l);
+    lambda_r = fabs(lambda_r);
+
+    if(lambda_l > lambda_r)
+        maxEdgeSpeed = lambda_l;
     else
-        maxEdgeSpeed = roe[1]*roe[1];
+        maxEdgeSpeed = lambda_r;
     
     return;
 }
