@@ -73,10 +73,12 @@ private:
      * @param hr water column height on the right side
      * @param hul momentum of the water on the left side
      * @param hur momentum of the water on the right side
+     * @param bl elevation of the ocean floor on the left side
+     * @param br elevation of the ocean floor on the right side
      * @param lambda_roe an array containing the two roe eigenvalues
      * @param alpha an array with at least two elements, where the eigencoefficients will be written into
      */
-    void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur,
+    void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur, const T &bl, const T &br,
                       const T *lambda_roe, T *alpha );
 };
 

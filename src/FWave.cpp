@@ -45,6 +45,7 @@ template<class T>
 void FWave<T>::eigencoeffis(
         const T &hl,  const T &hr,
         const T &hul, const T &hur,
+        const T &bl,  const T &br,
         const T *lambda_roe,
         T *alpha )
 {
@@ -59,9 +60,11 @@ void FWave<T>::eigencoeffis(
     flux(hr, hur, fr);
     flux(hl, hul, fl);
     
+    T bathymetry_influence = G * (bl - br) * (hl + hr) / 2;
+    
     // calculate the difference
     df[0] = fr[0] - fl[0];
-    df[1] = fr[1] - fl[1];
+    df[1] = fr[1] - fl[1] - bathymetry_influence;
     
     
     // matrix-vector multiplication:
@@ -95,7 +98,7 @@ void FWave<T>::computeNetUpdates(
     
     // compute the eigencoefficients
     T *alpha = new T[2];
-    eigencoeffis(hLeft, hRight, huLeft, huRight, lambda_roe, alpha); // formula 8
+    eigencoeffis(hLeft, hRight, huLeft, huRight, bathLeft, bathRight, lambda_roe, alpha); // formula 8
     
     // compute the waves
     T h[2];

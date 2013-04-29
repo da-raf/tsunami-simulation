@@ -93,7 +93,7 @@ public:
         // df.x = 1.5;
         // df.y = 7.73290921233;
         
-        solver.eigencoeffis(hl, hr, hul, hur, eigenvals, ec);
+        solver.eigencoeffis(hl, hr, hul, hur, 0.0, 0.0, eigenvals, ec);
         
         TS_ASSERT_DELTA(ec[0], -2.44909096188, MAXERROR);
         TS_ASSERT_DELTA(ec[1],  3.94909096188, MAXERROR);
