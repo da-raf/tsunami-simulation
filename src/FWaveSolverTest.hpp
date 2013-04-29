@@ -164,4 +164,35 @@ public:
         TS_ASSERT_DELTA(updateRight[1], 0.0, MAXERROR);
         
     }
+    
+    /**
+     * check the handling of bathymetric data
+     * 
+     * a steady state will be created, but with different water depths
+     */
+    void testBathymetry() {
+        FWave<TYPE> solver;
+        
+        TYPE hl = 10.0;
+        TYPE hr =  5.0;
+        TYPE hul = 0.0;
+        TYPE hur = 0.0;
+        
+        TYPE bl = -5.0;
+        TYPE br =  0.0;
+        // notice: hl + bl = 5 = hr + br
+        
+        TYPE updateLeft[2], updateRight[2];
+        TYPE maxSpeed;
+        
+        solver.computeNetUpdates(hl, hr, hul, hur, bl, br,
+                                 updateLeft[0], updateRight[0],
+                                 updateLeft[1], updateRight[1],
+                                 maxSpeed );
+        TS_ASSERT_DELTA(updateLeft[0], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateLeft[1], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateRight[0], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateRight[1], 0.0, MAXERROR);
+    }
+    
 };
