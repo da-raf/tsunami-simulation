@@ -97,6 +97,8 @@ void FWave<T>::computeNetUpdates(
     T *alpha = new T[2];
     
     if(bathLeft < 0.0 && bathRight < 0.0) {
+        // normal scenario: water on both sides
+        
         // compute the eigenvalues
         roeEigenvals(hLeft, hRight, huLeft, huRight, lambda_roe); // formula 3 and 4
         
@@ -113,11 +115,7 @@ void FWave<T>::computeNetUpdates(
         roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, lambda_roe);
         eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, lambda_roe, alpha);
     }
-    else {
-        // both cells are dry => we are on land
-        lambda_roe[0] = lambda_roe[1] = 0.0;
-        alpha[0] = alpha[1] = 0.0;
-    }
+    
     
     // compute the waves
     T h[2];
@@ -135,20 +133,27 @@ void FWave<T>::computeNetUpdates(
     hNetUpdateRight  = 0.0;
     huNetUpdateRight = 0.0;
     
-    // A- dQ
-    int i;
-    for(i=0; i<2; i++) {
-        if(lambda_roe[i] < 0.0) {
-            hNetUpdateLeft  += h[i];
-            huNetUpdateLeft += hu[i];
+    if(bathLeft < 0.0)
+    {
+        // A- dQ
+        int i;
+        for(i=0; i<2; i++) {
+            if(lambda_roe[i] < 0.0) {
+                hNetUpdateLeft  += h[i];
+                huNetUpdateLeft += hu[i];
+            }
         }
     }
     
-    // A+ dQ
-    for(i=0; i<2; i++) {
-        if(lambda_roe[i] > 0.0) {
-            hNetUpdateRight  += h[i];
-            huNetUpdateRight += hu[i];
+    if(bathRight < 0.0)
+    {
+        // A+ dQ
+        int j;
+        for(j=0; j<2; j++) {
+            if(lambda_roe[j] > 0.0) {
+                hNetUpdateRight  += h[j];
+                huNetUpdateRight += hu[j];
+            }
         }
     }
     
