@@ -195,4 +195,24 @@ public:
         TS_ASSERT_DELTA(updateRight[1], 0.0, MAXERROR);
     }
     
+    void testDryCells() {
+        FWave<TYPE> solver;
+        
+        TYPE h  = 5.0;
+        TYPE hu = 5.0;
+        
+        TYPE bl = -2.0;
+        TYPE br =  1.0;
+        
+        TYPE updateLeft[2], updateRight[2];
+        TYPE maxSpeed;
+        
+        solver.computeNetUpdates(h, 0.0, hu, 0.0, bl, br,
+                                 updateLeft[0], updateRight[0],
+                                 updateLeft[1], updateRight[1],
+                                 maxSpeed );
+        TS_ASSERT_DELTA(updateRight[0], 0.0, MAXERROR);
+        TS_ASSERT_DELTA(updateRight[1], 0.0, MAXERROR);
+    }
+    
 };
