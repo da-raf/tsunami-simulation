@@ -1,5 +1,3 @@
-#include <assert.h>
-
 #ifndef FWAVE_H
 #define FWAVE_H
 
@@ -24,8 +22,7 @@ public:
      * calculate the net-updates for a simulation of the flow of water
      * 
      * This implementation will calculate the net-updates for a simulation of flow of water
-     * using the height of the water column and its momentum as parameters and working with
-     * the system of finite differences.
+     * using the height of the water column and its momentum as parameters.
      * 
      * @param hLeft water column height on the left side
      * @param hRight water column height on the right side
@@ -62,7 +59,7 @@ private:
      * @param hr water column height on the right side
      * @param hul momentum of the water on the left side
      * @param hur momentum of the water on the right side
-     * @param lambda_roe an array with at least two elements, where the eigenvalues will be written into
+     * @param lambda_roe an array with two elements, where the eigenvalues will be written into
      */
     void roeEigenvals(const T &hl, const T &hr, const T &hul, const T &hur, T *lambda_roe);
     
@@ -76,7 +73,7 @@ private:
      * @param bl elevation of the ocean floor on the left side
      * @param br elevation of the ocean floor on the right side
      * @param lambda_roe an array containing the two roe eigenvalues
-     * @param alpha an array with at least two elements, where the eigencoefficients will be written into
+     * @param alpha an array with two elements, where the eigencoefficients will be written into
      */
     void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur, const T &bl, const T &br,
                       const T *lambda_roe, T *alpha );
@@ -84,7 +81,7 @@ private:
 
 #include "FWave.cpp"
 // end of namespace solver
-}
+};
 
 #endif
 

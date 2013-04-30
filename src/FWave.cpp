@@ -1,7 +1,9 @@
 #include "FWave.hpp"
 
+//#include <cmath>
 #include <math.h>
-#include <assert.h>
+#include <cassert>
+
 
 template<class T>
 void FWave<T>::flux(const T &h, const T &hu, T *fl)
@@ -50,11 +52,11 @@ void FWave<T>::eigencoeffis(
         T *alpha )
 {
     // flux left and right
-    T *fl = new T[2];
-    T *fr = new T[2];
+    T fl[2];
+    T fr[2];
     
     // the difference of the two fluxes
-    T *df = new T[2];
+    T df[2];
     
     // calculate the flux
     flux(hr, hur, fr);
@@ -72,7 +74,7 @@ void FWave<T>::eigencoeffis(
     // \ lambda_1 | lambda_2 /    * df
     
     // make sure we get a numerically stable result
-    assert(fabs(lambda_roe[1] - lambda_roe[0]) > 0.01);
+    assert( fabs(lambda_roe[1] - lambda_roe[0]) > 0.01);
     
     // perform the matrix-vector multiplication
     T c = 1 / (lambda_roe[1] - lambda_roe[0]);
@@ -93,8 +95,8 @@ void FWave<T>::computeNetUpdates(
 		T &maxEdgeSpeed )
 {
     
-    T *lambda_roe = new T[2];
-    T *alpha = new T[2];
+    T lambda_roe[2];
+    T alpha[2];
     
     if(bathLeft < 0.0 && bathRight < 0.0) {
         // normal scenario: water on both sides
@@ -173,10 +175,6 @@ void FWave<T>::computeNetUpdates(
         maxEdgeSpeed = lambda_l;
     else
         maxEdgeSpeed = lambda_r;
-    
-    // clean up
-    delete [] lambda_roe;
-    delete [] alpha;
     
     return;
 }
