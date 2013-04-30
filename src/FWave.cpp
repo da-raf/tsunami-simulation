@@ -92,13 +92,32 @@ void FWave<T>::computeNetUpdates(
 		T &huNetUpdateLeft, T &huNetUpdateRight,
 		T &maxEdgeSpeed )
 {
-    // compute the eigenvalues
-    T *lambda_roe = new T[2];
-    roeEigenvals(hLeft, hRight, huLeft, huRight, lambda_roe); // formula 3 and 4
     
-    // compute the eigencoefficients
+    T *lambda_roe = new T[2];
     T *alpha = new T[2];
-    eigencoeffis(hLeft, hRight, huLeft, huRight, bathLeft, bathRight, lambda_roe, alpha); // formula 8
+    
+    if(bathLeft < 0.0 && bathRight < 0.0) {
+        // compute the eigenvalues
+        roeEigenvals(hLeft, hRight, huLeft, huRight, lambda_roe); // formula 3 and 4
+        
+        // compute the eigencoefficients
+        eigencoeffis(hLeft, hRight, huLeft, huRight, bathLeft, bathRight, lambda_roe, alpha); // formula 8
+    }
+    else if(bathRight < 0.0) {
+        // the cell on the left is dry => reflection to the right
+        roeEigenvals(hRight, hRight, (-1) * huRight, huRight, lambda_roe);
+        eigencoeffis(hRight, hRight, (-1) * huRight, huRight, bathRight, bathRight, lambda_roe, alpha);
+    }
+    else if(bathLeft < 0.0) {
+        // the cell on the right is dry => reflection to the left
+        roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, lambda_roe);
+        eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, lambda_roe, alpha);
+    }
+    else {
+        // both cells are dry => we are on land
+        lambda_roe[0] = lambda_roe[1] = 0.0;
+        alpha[0] = alpha[1] = 0.0;
+    }
     
     // compute the waves
     T h[2];
@@ -149,6 +168,10 @@ void FWave<T>::computeNetUpdates(
         maxEdgeSpeed = lambda_l;
     else
         maxEdgeSpeed = lambda_r;
+    
+    // clean up
+    delete [] lambda_roe;
+    delete [] alpha;
     
     return;
 }
