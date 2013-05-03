@@ -1,3 +1,9 @@
+/**
+ * @file FWave.hpp f-wave solver
+ * 
+ * @author Raphael Dümig
+ */
+
 #ifndef FWAVE_H
 #define FWAVE_H
 
@@ -79,9 +85,10 @@ private:
                       const T *lambda_roe, T *alpha );
 };
 
-#include "FWave.cpp"
 // end of namespace solver
 };
+
+#include "FWave.cpp"
 
 #endif
 

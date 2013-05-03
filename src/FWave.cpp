@@ -1,9 +1,16 @@
+/**
+ * @file FWave.cpp Implementation of an f-wave solver
+ * 
+ * @author Raphael Dümig
+ */
+
 #include "FWave.hpp"
 
 #include <cmath>
 //#include <math.h>
 #include <cassert>
 
+using namespace solver;
 
 template<class T>
 void FWave<T>::flux(const T &h, const T &hu, T *fl)
