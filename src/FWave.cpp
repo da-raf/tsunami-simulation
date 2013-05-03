@@ -1,7 +1,7 @@
 #include "FWave.hpp"
 
-//#include <cmath>
-#include <math.h>
+#include <cmath>
+//#include <math.h>
 #include <cassert>
 
 
@@ -28,13 +28,13 @@ void FWave<T>::roeEigenvals(
     T ul = hul / hl;
     T ur = hur / hr;
     
-    T sqrt_hl = sqrt(hl);
-    T sqrt_hr = sqrt(hr);
+    T sqrt_hl = std::sqrt(hl);
+    T sqrt_hr = std::sqrt(hr);
     
     T h_roe = (hl + hr) / 2;
     T u_roe = (ul * sqrt_hl + ur * sqrt_hr) / (sqrt_hl + sqrt_hr);
     
-    T c = sqrt( G * h_roe );
+    T c = std::sqrt( G * h_roe );
     
     // calculate the roe eigenvalues
     lambda_roe[0] = u_roe - c;
@@ -74,7 +74,7 @@ void FWave<T>::eigencoeffis(
     // \ lambda_1 | lambda_2 /    * df
     
     // make sure we get a numerically stable result
-    assert( fabs(lambda_roe[1] - lambda_roe[0]) > 0.01);
+    assert( std::abs(lambda_roe[1] - lambda_roe[0]) > 0.01);
     
     // perform the matrix-vector multiplication
     T c = 1 / (lambda_roe[1] - lambda_roe[0]);
@@ -168,8 +168,8 @@ void FWave<T>::computeNetUpdates(
     else if(lambda_roe[0] > 0.0 && lambda_roe[1] > 0.0)
         lambda_l = 0.0;
     
-    lambda_l = fabs(lambda_l);
-    lambda_r = fabs(lambda_r);
+    lambda_l = std::abs(lambda_l);
+    lambda_r = std::abs(lambda_r);
 
     if(lambda_l > lambda_r)
         maxEdgeSpeed = lambda_l;
