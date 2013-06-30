@@ -117,13 +117,13 @@ void FWave<T>::computeNetUpdates(
     }
     else if(bathRight < 0.0) {
         // the cell on the left is dry => reflection to the right
-        roeEigenvals(hRight, hRight, (-1) * huRight, huRight, uLeft, uRight, lambda_roe);
-        eigencoeffis(hRight, hRight, (-1) * huRight, huRight, bathRight, bathRight, uLeft, uRight, lambda_roe, alpha);
+        roeEigenvals(hRight, hRight, (-1) * huRight, huRight, (-1) * uRight, uRight, lambda_roe);
+        eigencoeffis(hRight, hRight, (-1) * huRight, huRight, bathRight, bathRight, (-1) * uRight, uRight, lambda_roe, alpha);
     }
     else if(bathLeft < 0.0) {
         // the cell on the right is dry => reflection to the left
-        roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, uLeft, uRight, lambda_roe);
-        eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, uLeft, uRight, lambda_roe, alpha);
+        roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, uLeft, (-1) * uLeft, lambda_roe);
+        eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, uLeft, (-1) * uLeft, lambda_roe, alpha);
     }
     
     
