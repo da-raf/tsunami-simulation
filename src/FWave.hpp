@@ -44,6 +44,7 @@ public:
      */
     void computeNetUpdates(const T &hLeft, const T &hRight, const T &huLeft, const T &huRight,
                            const T &bathLeft, const T &bathRight,
+                           const T &uLeft, const T &uRight,
                            T& hNetUpdatesLeft,  T& hNetUpdatesRight,
                            T& huNetUpdatesLeft, T& huNetUpdatesRight,
                            T& maxEdgeSpeed );
@@ -56,7 +57,7 @@ private:
      * @param hu momentum of the water current
      * @param fl pointer to an array with at least two elements, where the resulting vector will be written into
      */
-    void flux(const T &h, const T &hu, T *fl);
+    void flux(const T &h, const T &hu, const T &u, T *fl);
     
     /** 
      * calculate the Roe eigenvalues for the left and right quantities
@@ -67,7 +68,7 @@ private:
      * @param hur momentum of the water on the right side
      * @param lambda_roe an array with two elements, where the eigenvalues will be written into
      */
-    void roeEigenvals(const T &hl, const T &hr, const T &hul, const T &hur, T *lambda_roe);
+    void roeEigenvals(const T &hl, const T &hr, const T &hul, const T &hur,const T &ul, const T &ur, T *lambda_roe);
     
     /**
      * calculate the eigencoefficients for given states left and right and roe-eigenvalues
@@ -81,7 +82,7 @@ private:
      * @param lambda_roe an array containing the two roe eigenvalues
      * @param alpha an array with two elements, where the eigencoefficients will be written into
      */
-    void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur, const T &bl, const T &br,
+    void eigencoeffis(const T &hl, const T &hr, const T &hul, const T &hur, const T &bl, const T &br, const T &ul, const T &ur,
                       const T *lambda_roe, T *alpha );
 };
 

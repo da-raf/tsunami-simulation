@@ -13,10 +13,10 @@
 using namespace solver;
 
 template<class T>
-void FWave<T>::flux(const T &h, const T &hu, T *fl)
+void FWave<T>::flux(const T &h, const T &hu,const T &u, T *fl)
 {
     fl[0] = hu;
-    fl[1] = (hu * hu) / h + G * (h * h) / 2;
+    fl[1] = (hu * u) + G * (h * h) / 2;
     
     return;
 }
@@ -25,6 +25,7 @@ template<class T>
 void FWave<T>::roeEigenvals(
         const T &hl,  const T &hr,
         const T &hul, const T &hur,
+        const T &ul, const T &ur,
         T *lambda_roe)
 {
     // assert that we got positiv values for the water columns
@@ -32,8 +33,6 @@ void FWave<T>::roeEigenvals(
     assert(hr > 0.0);
 
     // calculate the particle speeds
-    T ul = hul / hl;
-    T ur = hur / hr;
     
     T sqrt_hl = std::sqrt(hl);
     T sqrt_hr = std::sqrt(hr);
@@ -55,6 +54,7 @@ void FWave<T>::eigencoeffis(
         const T &hl,  const T &hr,
         const T &hul, const T &hur,
         const T &bl,  const T &br,
+        const T &ul, const T &ur,
         const T *lambda_roe,
         T *alpha )
 {
@@ -66,8 +66,8 @@ void FWave<T>::eigencoeffis(
     T df[2];
     
     // calculate the flux
-    flux(hr, hur, fr);
-    flux(hl, hul, fl);
+    flux(hr, hur, ur, fr);
+    flux(hl, hul, ul, fl);
     
     T bathymetry_influence = G * (bl - br) * (hl + hr) / 2;
     
@@ -97,6 +97,7 @@ void FWave<T>::computeNetUpdates(
 		const T &hLeft,     const T &hRight,
 		const T &huLeft,    const T &huRight,
 		const T &bathLeft,  const T &bathRight,
+        const T &uLeft, const T &uRight,
 		T &hNetUpdateLeft,  T &hNetUpdateRight,
 		T &huNetUpdateLeft, T &huNetUpdateRight,
 		T &maxEdgeSpeed )
@@ -109,20 +110,20 @@ void FWave<T>::computeNetUpdates(
         // normal scenario: water on both sides
         
         // compute the eigenvalues
-        roeEigenvals(hLeft, hRight, huLeft, huRight, lambda_roe); // formula 3 and 4
+        roeEigenvals(hLeft, hRight, huLeft, huRight, uLeft, uRight, lambda_roe); // formula 3 and 4
         
         // compute the eigencoefficients
-        eigencoeffis(hLeft, hRight, huLeft, huRight, bathLeft, bathRight, lambda_roe, alpha); // formula 8
+        eigencoeffis(hLeft, hRight, huLeft, huRight, bathLeft, bathRight, uLeft, uRight, lambda_roe, alpha); // formula 8
     }
     else if(bathRight < 0.0) {
         // the cell on the left is dry => reflection to the right
-        roeEigenvals(hRight, hRight, (-1) * huRight, huRight, lambda_roe);
-        eigencoeffis(hRight, hRight, (-1) * huRight, huRight, bathRight, bathRight, lambda_roe, alpha);
+        roeEigenvals(hRight, hRight, (-1) * huRight, huRight, uLeft, uRight, lambda_roe);
+        eigencoeffis(hRight, hRight, (-1) * huRight, huRight, bathRight, bathRight, uLeft, uRight, lambda_roe, alpha);
     }
     else if(bathLeft < 0.0) {
         // the cell on the right is dry => reflection to the left
-        roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, lambda_roe);
-        eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, lambda_roe, alpha);
+        roeEigenvals(hLeft, hLeft, huLeft, (-1) * huLeft, uLeft, uRight, lambda_roe);
+        eigencoeffis(hLeft, hLeft, huLeft, (-1) * huLeft, bathLeft, bathLeft, uLeft, uRight, lambda_roe, alpha);
     }
     
     
